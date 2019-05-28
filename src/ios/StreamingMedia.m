@@ -351,9 +351,12 @@ NSString * const DEFAULT_IMAGE_SCALE = @"center";
 
 - (void) moviePlayBackDidFinish:(NSNotification*)notification {
     // calculate progress
-    CMTime duration = moviePlayer.player.currentItem.duration;
-    CMTime currentTime =  moviePlayer.player.currentItem.currentTime;
-    double progress = (CMTimeGetSeconds(currentTime) / CMTimeGetSeconds(duration)) * 100;
+    double duration = CMTimeGetSeconds(moviePlayer.player.currentItem.duration);
+    double currentTime =  CMTimeGetSeconds(moviePlayer.player.currentItem.currentTime);
+    double progress = 0;
+    if (!isnan(duration) && !isnan(currentTime)) {
+        progress = (currentTime / duration) * 100;
+    }
     NSLog(@"Progress: %f", progress);
 
     NSLog(@"Playback did finish with auto close being %d, and error message being %@", shouldAutoClose, notification.userInfo);
